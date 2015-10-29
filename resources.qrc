@@ -1,0 +1,8 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/">
+   <file>icons/mailbox_empty.png</file>
+   <file>icons/mailbox_full.png</file>
+   <file>icons/menu_quit.png</file>
+   <file>icons/check_now.png</file>
+</qresource>
+</RCC>
