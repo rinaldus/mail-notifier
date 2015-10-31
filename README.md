@@ -4,7 +4,7 @@ This is Light weight mail notifier written in PyQt5. It checks your mailbox peri
 
 ## Screenshots
 ![MailboxEmpty](https://raw.github.com/rinaldus/mail-notify/master/screenshots/screen1.jpg)
-![MailboxFull](https://raw.github.com/rinaldus/mail-notify/master/screenshots/screen1.jpg)
+![MailboxFull](https://raw.github.com/rinaldus/mail-notify/master/screenshots/screen2.jpg)
 ![Settings](https://raw.github.com/rinaldus/mail-notify/master/screenshots/screen3.jpg)
 
 ## Install
