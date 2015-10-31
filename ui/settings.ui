@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Mail Notify - Settings</string>
+   <string>Mail Notifier - Settings</string>
   </property>
   <property name="windowIcon">
    <iconset>

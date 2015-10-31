@@ -201,7 +201,7 @@ if __name__ == '__main__':
         sys.exit(1)
     QApplication.setQuitOnLastWindowClosed(False)
     window = Window()
-    if (SettingsExist() == True):
+    if SettingsExist():
         window.hide()
     else:
         window.show()

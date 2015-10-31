@@ -120,7 +120,7 @@ class Ui_Settings(object):
 
     def retranslateUi(self, Settings):
         _translate = QtCore.QCoreApplication.translate
-        Settings.setWindowTitle(_translate("Settings", "Mail Notify - Settings"))
+        Settings.setWindowTitle(_translate("Settings", "Mail Notifier - Settings"))
         self.boolifNotify.setText(_translate("Settings", "Use also pop-up notification"))
         self.groupBox.setTitle(_translate("Settings", "IMAP settings"))
         self.txtboxMailServer.setPlaceholderText(_translate("Settings", "mail.example.com"))
