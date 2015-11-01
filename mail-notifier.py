@@ -19,7 +19,7 @@ import hashlib, uuid
 #variables
 timers = []
 programTitle = "Mail Notifier"
-settings = QSettings(os.path.expanduser("~")+"/.config/mail-notify/settings.conf", QSettings.NativeFormat)
+settings = QSettings(os.path.expanduser("~")+"/.config/mail-notifier/settings.conf", QSettings.NativeFormat)
 def SettingsExist():
     if ((settings.contains("CheckInterval") and settings.value("CheckInterval") != "") and
         (settings.contains("Notify") and settings.value("Notify") != "") and
