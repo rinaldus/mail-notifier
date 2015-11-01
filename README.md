@@ -20,9 +20,9 @@ $ chmod +x mail-notifier.py
 ```
 
 ## Changelog
-### Version 1.0 (release date: 31.10.15)
+### Version 1.0 (release date: 01.11.15)
 * Settings window
-* All parameters are stored in configuration file *(~/.config/mail-notify/settings.conf)*
+* All parameters are stored in configuration file *(~/.config/mail-notifier/settings.conf)*
 * Many improvements
 
 ### Version 0.10 (pre release date: 28.10.15)
