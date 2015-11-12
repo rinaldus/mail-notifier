@@ -195,10 +195,11 @@ class Thread(QThread):
 if __name__ == '__main__':
     import sys
     app = QApplication(sys.argv)
-    if not QSystemTrayIcon.isSystemTrayAvailable():
-        QMessageBox.critical(None, "Mail notifier",
-                "I couldn't detect any system tray on this system.")
-        sys.exit(1)
+    # Some DE are not response adequately on it, trying to ignore tray check
+    # if not QSystemTrayIcon.isSystemTrayAvailable():
+    #    QMessageBox.critical(None, "Mail notifier",
+    #            "I couldn't detect any system tray on this system.")
+    #    sys.exit(1)
     QApplication.setQuitOnLastWindowClosed(False)
     window = Window()
     if SettingsExist():
