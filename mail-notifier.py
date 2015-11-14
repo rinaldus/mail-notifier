@@ -15,6 +15,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import os
 import socket
 import hashlib, uuid
+import time
 
 #variables
 timers = []
@@ -195,11 +196,15 @@ class Thread(QThread):
 if __name__ == '__main__':
     import sys
     app = QApplication(sys.argv)
-    # Some DE are not response adequately on it, trying to ignore tray check
-    # if not QSystemTrayIcon.isSystemTrayAvailable():
-    #    QMessageBox.critical(None, "Mail notifier",
-    #            "I couldn't detect any system tray on this system.")
-    #    sys.exit(1)
+    systemtray_timeout = 0
+    # Check if DE supports system tray
+    while not QSystemTrayIcon.isSystemTrayAvailable():
+        systemtray_timeout += 1
+        time.sleep (20)
+        if systemtray_timeout == 5:
+            QMessageBox.critical(None, "Mail notifier",
+                    "I couldn't detect any system tray on this system.")
+            sys.exit(1)
     QApplication.setQuitOnLastWindowClosed(False)
     window = Window()
     if SettingsExist():
