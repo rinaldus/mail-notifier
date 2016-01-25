@@ -20,6 +20,10 @@ $ chmod +x mail-notifier.py
 ```
 
 ## Changelog
+### Version 1.01 (release date: 25.01.16)
+* New icon, that shows if you have connection problems
+* Fixed bug when system tray icon sometimes didn't appear after DE start
+
 ### Version 1.0 (release date: 01.11.15)
 * Settings window
 * All parameters are stored in configuration file *(~/.config/mail-notifier/settings.conf)*
