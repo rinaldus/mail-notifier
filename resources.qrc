@@ -2,6 +2,7 @@
 <qresource prefix="/">
    <file>icons/mailbox_empty.png</file>
    <file>icons/mailbox_full.png</file>
+   <file>icons/mailbox_error.png</file>
    <file>icons/menu_quit.png</file>
    <file>icons/check_now.png</file>
    <file>icons/settings.png</file>

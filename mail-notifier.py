@@ -166,6 +166,7 @@ def mail_check():
         else:
             window.trayIcon.setToolTip("Unable to establish connection to mailbox. Check your mail settings and make sure that you have not network problems.")
             notify("Unable to establish connection to mailbox. Check your mail settings and make sure that you have not network problems.")
+            window.trayIcon.setIcon(QIcon(":icons/mailbox_error.png"))
     else:
         window.trayIcon.setToolTip("Cannot find configuration file. You should give access to your mailbox")
 def notify(message):
