@@ -14,7 +14,6 @@ from ui_settings import Ui_Settings
 from PyQt5 import QtCore, QtGui, QtWidgets
 import os
 import socket
-import hashlib, uuid
 import time
 
 #variables
@@ -54,6 +53,11 @@ class Window(QDialog):
         self.ui.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).clicked.connect(self.btnOK_clicked)
         self.ui.buttonBox.button(QtWidgets.QDialogButtonBox.Cancel).clicked.connect(self.btnCancel_clicked)
         self.ui.btnTestConnection.clicked.connect(self.btnTestConnection_clicked)
+        
+        # Main timer
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(mail_check)
+        
         # Menu actions
     def createActions(self):
         self.quitAction = QAction(QIcon(':icons/menu_quit.png'),"&Quit", self,
@@ -98,6 +102,8 @@ class Window(QDialog):
             self.show()
         mail_check()
         self.ui.lblTestOutput.setText("")
+        self.stop()
+        self.start()
 			
     def btnCancel_clicked(self):
         self.SettingsRestore()
@@ -115,6 +121,17 @@ class Window(QDialog):
             output = "Unable to establish connection to mailbox"
         finally:
             self.ui.lblTestOutput.setText(output)
+            
+    def start(self):
+        if SettingsExist():
+            CheckInterval = 1000*60*int(settings.value("CheckInterval"))
+        else:
+            CheckInterval = 1000*60*5
+        self.timer.setInterval (CheckInterval)
+        self.timer.start()
+        
+    def stop (self):
+        self.timer.stop()
 
     def closeEvent(self, event): 
         print ("Closing the app")
@@ -174,26 +191,6 @@ def notify(message):
         subprocess.Popen(['notify-send', programTitle, message])
     return
     
-def hash(password):
-    salt = uuid.uuid4().hex
-    return hashlib.sha512(password.encode('utf-8') + salt.encode('utf-8')).hexdigest()
-
-class Thread(QThread):
-    def __init__(self):
-        QThread.__init__(self)
-
-    def run(self):
-        timer = QTimer()
-        timer.timeout.connect(mail_check)
-        if SettingsExist():
-            CheckInterval = 1000*60*int(settings.value("CheckInterval"))
-        else:
-            CheckInterval = 1000*60*5
-        timer.start(CheckInterval)
-        timers.append(timer)
-
-        self.exec_()
-
 if __name__ == '__main__':
     import sys
     app = QApplication(sys.argv)
@@ -214,6 +211,5 @@ if __name__ == '__main__':
         window.show()
     # UI started. Starting required functions after UI start
     mail_check()
-    thread_instance = Thread()
-    thread_instance.start()
+    window.start()
     sys.exit(app.exec_())
