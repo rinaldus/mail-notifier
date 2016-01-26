@@ -20,6 +20,9 @@ $ chmod +x mail-notifier.py
 ```
 
 ## Changelog
+### Version 1.02 (release date: 26.01.16)
+* Rewrote periodical mail check function and fixed bug in OS X
+
 ### Version 1.01 (release date: 25.01.16)
 * New icon, that shows if you have connection problems
 * Fixed bug when system tray icon sometimes didn't appear after DE start
