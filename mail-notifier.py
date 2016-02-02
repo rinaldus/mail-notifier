@@ -176,6 +176,9 @@ def mail_check():
             if mail_count == 0:
                 window.trayIcon.setToolTip ("You have no unread mail")
                 window.trayIcon.setIcon(QIcon(":icons/mailbox_empty.png"))
+            elif mail_count == "ERROR":
+                window.trayIcon.setIcon(QIcon(":icons/mailbox_error.png"))
+                window.trayIcon.setToolTip ("Error checking mail.")
             else:
                 window.trayIcon.setToolTip ("You have "+ str(mail_count)+" unread letters")
                 window.trayIcon.setIcon(QIcon(":icons/mailbox_full.png"))
