@@ -340,7 +340,7 @@
     </iconset>
    </property>
   </widget>
-  <widget class="QPushButton" name="btnModifyAccount">
+  <widget class="QPushButton" name="btnRenameAccount">
    <property name="geometry">
     <rect>
      <x>220</x>
@@ -350,7 +350,7 @@
     </rect>
    </property>
    <property name="toolTip">
-    <string>Modify account</string>
+    <string>Rename account</string>
    </property>
    <property name="text">
     <string/>

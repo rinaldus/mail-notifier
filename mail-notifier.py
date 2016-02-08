@@ -70,7 +70,7 @@ class Window(QDialog):
         self.ui.btnTestConnection.clicked.connect(self.btnTestConnection_clicked)
         self.ui.comboAccounts.currentTextChanged.connect(self.comboAccounts_changed)
         self.ui.btnAddAccount.clicked.connect(self.btnAddAccount_clicked)
-        self.ui.btnModifyAccount.clicked.connect(self.btnModifyAccount_clicked)
+        self.ui.btnRenameAccount.clicked.connect(self.btnRenameAccount_clicked)
         self.ui.btnRemoveAccount.clicked.connect(self.btnRemoveAccount_clicked)
         
         # Main timer
@@ -114,10 +114,10 @@ class Window(QDialog):
             self.ui.checkFreq.setValue(int(settings.value("CheckInterval")))
             self.ui.boolifNotify.setChecked(bool(settings.value("Notify")))
            
-    def SettingsSave(self):
+    def SettingsSave(self,account):
         settings.setValue("CheckInterval",self.ui.checkFreq.value())
         settings.setValue("Notify", self.ui.boolifNotify.isChecked())
-        settings.beginGroup(self.ui.comboAccounts.currentText())
+        settings.beginGroup(account)
         settings.setValue("MailServer",self.ui.txtboxMailServer.text())
         settings.setValue("Port",self.ui.txtboxPort.text())
         settings.setValue("Login",self.ui.txtboxLogin.text())
@@ -131,7 +131,7 @@ class Window(QDialog):
         settings.endGroup()
     
     def btnOK_clicked(self):
-        self.SettingsSave()
+        self.SettingsSave(self.ui.comboAccounts.currentText())
         
         if (settings.value("MailServer") == "" or settings.value("Port") == "" or settings.value("Login") == "" or settings.value("Password") == ""):
             QMessageBox.critical(self, "Warning","You should fill all fields in IMAP settings!")
@@ -164,11 +164,12 @@ class Window(QDialog):
             self.ui.comboAccounts.addItem(GroupName[0])
             self.ui.comboAccounts.setCurrentText(GroupName[0])
             
-    def btnModifyAccount_clicked(self):
+    def btnRenameAccount_clicked(self):
         Index = self.ui.comboAccounts.currentIndex()
         OldGroupName = self.ui.comboAccounts.currentText()
         GroupName = QInputDialog.getText(self,"Enter account name","Enter account name",QLineEdit.Normal,self.ui.comboAccounts.currentText())
         if (GroupName[0]):
+            self.SettingsSave(GroupName[0])
             self.ui.comboAccounts.setItemText(Index, GroupName[0])
             self.ui.comboAccounts.setCurrentText(GroupName[0])
             self.SettingsRemove(OldGroupName)
@@ -232,10 +233,10 @@ class Mail():
             return "ERROR"
 
 def mail_check():
+    mail_count = 0
     if (GlobalSettingsExist() and AccountExist()):
         m = Mail()
         groups = settings.childGroups()
-        mail_count = 0
         for i in range (len(groups)):
             settings.beginGroup(groups[i])
             group = groups[i]
@@ -246,7 +247,10 @@ def mail_check():
             ssl = settings.value("SSL")
             settings.endGroup()
             if m.login(mailserver,port,user,password,ssl):
-                mail_count += m.checkMail()   # mail_count + "ERROR" = ?????
+                if (mail_count == "ERROR" or m.checkMail() == "ERROR"):
+                    mail_count = "ERROR"
+                else:
+                    mail_count += m.checkMail()
             else:
                 window.trayIcon.setToolTip("Unable to establish connection to mailbox. Check your mail settings and make sure that you have not network problems.")
                 notify("Unable to establish connection to mailbox. Check your mail settings and make sure that you have not network problems.")
@@ -292,3 +296,7 @@ if __name__ == '__main__':
     mail_check()
     window.start()
     sys.exit(app.exec_())
+# TODO:
+# Separate mail count for each account
+# New save account button
+# Account removal warning dialog
