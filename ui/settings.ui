@@ -364,7 +364,7 @@
   <widget class="QPushButton" name="btnRemoveAccount">
    <property name="geometry">
     <rect>
-     <x>260</x>
+     <x>300</x>
      <y>80</y>
      <width>31</width>
      <height>23</height>
@@ -379,6 +379,27 @@
    <property name="icon">
     <iconset>
      <normalon>:/icons/remove_account.png</normalon>
+    </iconset>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnSaveAccount">
+   <property name="geometry">
+    <rect>
+     <x>260</x>
+     <y>80</y>
+     <width>31</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Save account</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normalon>:/icons/save_account.png</normalon>
     </iconset>
    </property>
   </widget>

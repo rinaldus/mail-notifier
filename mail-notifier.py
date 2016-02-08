@@ -71,6 +71,7 @@ class Window(QDialog):
         self.ui.comboAccounts.currentTextChanged.connect(self.comboAccounts_changed)
         self.ui.btnAddAccount.clicked.connect(self.btnAddAccount_clicked)
         self.ui.btnRenameAccount.clicked.connect(self.btnRenameAccount_clicked)
+        self.ui.btnSaveAccount.clicked.connect(self.btnSaveAccount_clicked)
         self.ui.btnRemoveAccount.clicked.connect(self.btnRemoveAccount_clicked)
         
         # Main timer
@@ -173,14 +174,21 @@ class Window(QDialog):
             self.ui.comboAccounts.setItemText(Index, GroupName[0])
             self.ui.comboAccounts.setCurrentText(GroupName[0])
             self.SettingsRemove(OldGroupName)
+    
+    def btnSaveAccount_clicked(self):
+        self.SettingsSave(self.ui.comboAccounts.currentText())
+        self.ui.lblTestOutput.setText("Acount saved")
             
     def btnRemoveAccount_clicked(self):
-        Index = self.ui.comboAccounts.currentIndex()
-        GroupName = self.ui.comboAccounts.currentText()
-        self.ui.comboAccounts.removeItem(Index)
-        self.SettingsRemove(GroupName)
+        reply = QMessageBox.critical(self, 'Warning!', "Delete this account permanently?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if (reply == QMessageBox.Yes):
+            Index = self.ui.comboAccounts.currentIndex()
+            GroupName = self.ui.comboAccounts.currentText()
+            self.ui.comboAccounts.removeItem(Index)
+            self.SettingsRemove(GroupName)
             
     def comboAccounts_changed(self):
+        self.ui.lblTestOutput.setText("")
         settings.beginGroup(self.ui.comboAccounts.currentText())
         self.ui.txtboxMailServer.setText(settings.value("MailServer"))
         self.ui.txtboxPort.setText(settings.value("Port"))
@@ -298,5 +306,3 @@ if __name__ == '__main__':
     sys.exit(app.exec_())
 # TODO:
 # Separate mail count for each account
-# New save account button
-# Account removal warning dialog

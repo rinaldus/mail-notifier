@@ -131,12 +131,19 @@ class Ui_Settings(object):
         self.btnRenameAccount.setIcon(icon2)
         self.btnRenameAccount.setObjectName("btnRenameAccount")
         self.btnRemoveAccount = QtWidgets.QPushButton(Settings)
-        self.btnRemoveAccount.setGeometry(QtCore.QRect(260, 80, 31, 23))
+        self.btnRemoveAccount.setGeometry(QtCore.QRect(300, 80, 31, 23))
         self.btnRemoveAccount.setText("")
         icon3 = QtGui.QIcon()
         icon3.addPixmap(QtGui.QPixmap(":/icons/remove_account.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.btnRemoveAccount.setIcon(icon3)
         self.btnRemoveAccount.setObjectName("btnRemoveAccount")
+        self.btnSaveAccount = QtWidgets.QPushButton(Settings)
+        self.btnSaveAccount.setGeometry(QtCore.QRect(260, 80, 31, 23))
+        self.btnSaveAccount.setText("")
+        icon4 = QtGui.QIcon()
+        icon4.addPixmap(QtGui.QPixmap(":/icons/save_account.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.btnSaveAccount.setIcon(icon4)
+        self.btnSaveAccount.setObjectName("btnSaveAccount")
 
         self.retranslateUi(Settings)
         self.buttonBox.accepted.connect(Settings.accept)
@@ -162,5 +169,6 @@ class Ui_Settings(object):
         self.btnAddAccount.setToolTip(_translate("Settings", "Add account"))
         self.btnRenameAccount.setToolTip(_translate("Settings", "Rename account"))
         self.btnRemoveAccount.setToolTip(_translate("Settings", "Remove account"))
+        self.btnSaveAccount.setToolTip(_translate("Settings", "Save account"))
 
 import resources_rc
