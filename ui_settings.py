@@ -127,7 +127,7 @@ class Ui_Settings(object):
         self.btnRenameAccount.setGeometry(QtCore.QRect(220, 80, 31, 23))
         self.btnRenameAccount.setText("")
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap(":/icons/modify_account.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        icon2.addPixmap(QtGui.QPixmap(":/icons/rename_account.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.btnRenameAccount.setIcon(icon2)
         self.btnRenameAccount.setObjectName("btnRenameAccount")
         self.btnRemoveAccount = QtWidgets.QPushButton(Settings)

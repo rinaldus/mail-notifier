@@ -1,13 +1,13 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource prefix="/">
-   <file>icons/mailbox_empty.png</file>
-   <file>icons/mailbox_full.png</file>
-   <file>icons/mailbox_error.png</file>
-   <file>icons/menu_quit.png</file>
-   <file>icons/check_now.png</file>
-   <file>icons/settings.png</file>
-   <file>icons/add_account.png</file>
-   <file>icons/modify_account.png</file>
-   <file>icons/remove_account.png</file>
-</qresource>
+<RCC>
+  <qresource prefix="/">
+    <file>icons/mailbox_empty.png</file>
+    <file>icons/mailbox_full.png</file>
+    <file>icons/mailbox_error.png</file>
+    <file>icons/menu_quit.png</file>
+    <file>icons/check_now.png</file>
+    <file>icons/settings.png</file>
+    <file>icons/add_account.png</file>
+    <file>icons/remove_account.png</file>
+    <file>icons/rename_account.png</file>
+  </qresource>
 </RCC>

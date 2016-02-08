@@ -357,7 +357,7 @@
    </property>
    <property name="icon">
     <iconset>
-     <normalon>:/icons/modify_account.png</normalon>
+     <normalon>:/icons/rename_account.png</normalon>
     </iconset>
    </property>
   </widget>
