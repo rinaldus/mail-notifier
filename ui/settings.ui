@@ -306,7 +306,7 @@
     <string>minutes</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="comboBox">
+  <widget class="QComboBox" name="comboAccounts">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -314,6 +314,9 @@
      <width>151</width>
      <height>23</height>
     </rect>
+   </property>
+   <property name="insertPolicy">
+    <enum>QComboBox::InsertAtCurrent</enum>
    </property>
   </widget>
   <widget class="QPushButton" name="btnAddAccount">

@@ -4,7 +4,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QAction, QApplication, QCheckBox, QComboBox,
         QDialog, QGridLayout, QGroupBox, QHBoxLayout, QLabel, QLineEdit,
         QMessageBox, QMenu, QPushButton, QSpinBox, QStyle, QSystemTrayIcon,
-        QTextEdit, QVBoxLayout)
+        QTextEdit, QVBoxLayout, QInputDialog)
 from PyQt5.QtCore import (QThread, QTimer, QFile, QSettings)
 import imaplib
 imaplib._MAXLINE = 400000
@@ -20,14 +20,29 @@ import time
 timers = []
 programTitle = "Mail Notifier"
 settings = QSettings(os.path.expanduser("~")+"/.config/mail-notifier/settings.conf", QSettings.NativeFormat)
-def SettingsExist():
+def GlobalSettingsExist():
     if ((settings.contains("CheckInterval") and settings.value("CheckInterval") != "") and
-        (settings.contains("Notify") and settings.value("Notify") != "") and
-        (settings.contains("MailServer") and settings.value("MailServer") != "") and
+        (settings.contains("Notify") and settings.value("Notify") != "")):
+        return True
+    else:
+        return False
+        
+def AccountExist():
+    groups = settings.childGroups()
+    if (len(groups)) != 0:
+        settings.beginGroup(groups[0])
+        if ((settings.contains("MailServer") and settings.value("MailServer") != "") and
         (settings.contains("Port") and settings.value("Port") != "") and
         (settings.contains("Login") and settings.value("Login") != "") and
         (settings.contains("Password") and settings.value("Password") != "") and
         (settings.contains("SSL") and settings.value("SSL") != "")):
+            n = True
+        else:
+            n = False
+        settings.endGroup()
+    else:
+        n = False
+    if (n):
         return True
     else:
         return False
@@ -53,6 +68,10 @@ class Window(QDialog):
         self.ui.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).clicked.connect(self.btnOK_clicked)
         self.ui.buttonBox.button(QtWidgets.QDialogButtonBox.Cancel).clicked.connect(self.btnCancel_clicked)
         self.ui.btnTestConnection.clicked.connect(self.btnTestConnection_clicked)
+        self.ui.comboAccounts.currentTextChanged.connect(self.comboAccounts_changed)
+        self.ui.btnAddAccount.clicked.connect(self.btnAddAccount_clicked)
+        self.ui.btnModifyAccount.clicked.connect(self.btnModifyAccount_clicked)
+        self.ui.btnRemoveAccount.clicked.connect(self.btnRemoveAccount_clicked)
         
         # Main timer
         self.timer = QTimer(self)
@@ -77,22 +96,39 @@ class Window(QDialog):
         self.trayIcon.setContextMenu(self.trayIconMenu)
 
     def SettingsRestore(self):
-        if SettingsExist():
+        if (GlobalSettingsExist() and AccountExist()):
+            groups = settings.childGroups()
+            for i in range (len(groups)):
+                self.ui.comboAccounts.addItem(groups[i])
+                self.ui.comboAccounts.setCurrentText(groups[i])
+                settings.beginGroup(groups[i])
+                self.ui.txtboxMailServer.setText(settings.value("MailServer"))
+                self.ui.txtboxPort.setText(settings.value("Port"))
+                self.ui.txtboxLogin.setText(settings.value("Login"))
+                self.ui.txtboxPassword.setText(settings.value("Password"))
+                self.ui.boolifSSL.setChecked(bool(settings.value("SSL")))
+                settings.endGroup()
+            if (self.ui.comboAccounts.count() == 0):
+                self.ui.comboAccounts.addItem("Default")
+                self.ui.comboAccounts.setCurrentText("Default")
             self.ui.checkFreq.setValue(int(settings.value("CheckInterval")))
             self.ui.boolifNotify.setChecked(bool(settings.value("Notify")))
-            self.ui.txtboxMailServer.setText(settings.value("MailServer"))
-            self.ui.txtboxPort.setText(settings.value("Port"))
-            self.ui.txtboxLogin.setText(settings.value("Login"))
-            self.ui.txtboxPassword.setText(settings.value("Password"))
-            self.ui.boolifSSL.setChecked(bool(settings.value("SSL")))
+           
     def SettingsSave(self):
         settings.setValue("CheckInterval",self.ui.checkFreq.value())
         settings.setValue("Notify", self.ui.boolifNotify.isChecked())
+        settings.beginGroup(self.ui.comboAccounts.currentText())
         settings.setValue("MailServer",self.ui.txtboxMailServer.text())
         settings.setValue("Port",self.ui.txtboxPort.text())
         settings.setValue("Login",self.ui.txtboxLogin.text())
         settings.setValue("Password",self.ui.txtboxPassword.text())
         settings.setValue("SSL",self.ui.boolifSSL.isChecked())
+        settings.endGroup()
+            
+    def SettingsRemove(self,group):
+        settings.beginGroup(group)
+        settings.remove("")
+        settings.endGroup()
     
     def btnOK_clicked(self):
         self.SettingsSave()
@@ -121,9 +157,39 @@ class Window(QDialog):
             output = "Unable to establish connection to mailbox"
         finally:
             self.ui.lblTestOutput.setText(output)
+    
+    def btnAddAccount_clicked(self):
+        GroupName = QInputDialog.getText(self,"Enter account name","Enter account name",QLineEdit.Normal,"")
+        if (GroupName[0]):
+            self.ui.comboAccounts.addItem(GroupName[0])
+            self.ui.comboAccounts.setCurrentText(GroupName[0])
             
+    def btnModifyAccount_clicked(self):
+        Index = self.ui.comboAccounts.currentIndex()
+        OldGroupName = self.ui.comboAccounts.currentText()
+        GroupName = QInputDialog.getText(self,"Enter account name","Enter account name",QLineEdit.Normal,self.ui.comboAccounts.currentText())
+        if (GroupName[0]):
+            self.ui.comboAccounts.setItemText(Index, GroupName[0])
+            self.ui.comboAccounts.setCurrentText(GroupName[0])
+            self.SettingsRemove(OldGroupName)
+            
+    def btnRemoveAccount_clicked(self):
+        Index = self.ui.comboAccounts.currentIndex()
+        GroupName = self.ui.comboAccounts.currentText()
+        self.ui.comboAccounts.removeItem(Index)
+        self.SettingsRemove(GroupName)
+            
+    def comboAccounts_changed(self):
+        settings.beginGroup(self.ui.comboAccounts.currentText())
+        self.ui.txtboxMailServer.setText(settings.value("MailServer"))
+        self.ui.txtboxPort.setText(settings.value("Port"))
+        self.ui.txtboxLogin.setText(settings.value("Login"))
+        self.ui.txtboxPassword.setText(settings.value("Password"))
+        self.ui.boolifSSL.setChecked(bool(settings.value("SSL")))
+        settings.endGroup()
+                        
     def start(self):
-        if SettingsExist():
+        if (GlobalSettingsExist() and AccountExist()):
             CheckInterval = 1000*60*int(settings.value("CheckInterval"))
         else:
             CheckInterval = 1000*60*5
@@ -136,24 +202,21 @@ class Window(QDialog):
     def closeEvent(self, event): 
         print ("Closing the app")
         
+        
 # Common functions
 
 class Mail():
     def __init__(self):
         socket.setdefaulttimeout(5)
-        self.user = settings.value("Login")
-        self.password = settings.value("Password")
-        self.mailserver = settings.value("MailServer")
-        self.port = settings.value("Port")
         
-    def login(self):
+    def login(self,mailserver,port,user,password,ssl):
         try:
-            if settings.value("SSL"):
-                self.imap = imaplib.IMAP4_SSL(self.mailserver, self.port)
+            if ssl:
+                self.imap = imaplib.IMAP4_SSL(mailserver, port)
                 
             else:
-                self.imap = imaplib.IMAP4(self.mailserver, self.port)
-            self.imap.login(self.user, self.password)
+                self.imap = imaplib.IMAP4(mailserver, port)
+            self.imap.login(user, password)
             return True
         except:
             print("Login error")
@@ -169,26 +232,39 @@ class Mail():
             return "ERROR"
 
 def mail_check():
-    if SettingsExist():
+    if (GlobalSettingsExist() and AccountExist()):
         m = Mail()
-        if m.login():
-            mail_count = m.checkMail()
-            if mail_count == 0:
-                window.trayIcon.setToolTip ("You have no unread mail")
-                window.trayIcon.setIcon(QIcon(":icons/mailbox_empty.png"))
-            elif mail_count == "ERROR":
-                window.trayIcon.setIcon(QIcon(":icons/mailbox_error.png"))
-                window.trayIcon.setToolTip ("Error checking mail.")
+        groups = settings.childGroups()
+        mail_count = 0
+        for i in range (len(groups)):
+            settings.beginGroup(groups[i])
+            group = groups[i]
+            user = settings.value("Login")
+            password = settings.value("Password")
+            mailserver = settings.value("MailServer")
+            port = settings.value("Port")
+            ssl = settings.value("SSL")
+            settings.endGroup()
+            if m.login(mailserver,port,user,password,ssl):
+                mail_count += m.checkMail()   # mail_count + "ERROR" = ?????
             else:
-                window.trayIcon.setToolTip ("You have "+ str(mail_count)+" unread letters")
-                window.trayIcon.setIcon(QIcon(":icons/mailbox_full.png"))
-                notify ("You have "+ str(mail_count) +" unread letters")
-        else:
-            window.trayIcon.setToolTip("Unable to establish connection to mailbox. Check your mail settings and make sure that you have not network problems.")
-            notify("Unable to establish connection to mailbox. Check your mail settings and make sure that you have not network problems.")
-            window.trayIcon.setIcon(QIcon(":icons/mailbox_error.png"))
+                window.trayIcon.setToolTip("Unable to establish connection to mailbox. Check your mail settings and make sure that you have not network problems.")
+                notify("Unable to establish connection to mailbox. Check your mail settings and make sure that you have not network problems.")
+                window.trayIcon.setIcon(QIcon(":icons/mailbox_error.png"))
     else:
+        window.trayIcon.setIcon(QIcon(":icons/mailbox_error.png"))
         window.trayIcon.setToolTip("Cannot find configuration file. You should give access to your mailbox")
+        
+    if mail_count == 0:
+        window.trayIcon.setToolTip ("You have no unread mail")
+        window.trayIcon.setIcon(QIcon(":icons/mailbox_empty.png"))
+    elif mail_count == "ERROR":
+        window.trayIcon.setIcon(QIcon(":icons/mailbox_error.png"))
+        window.trayIcon.setToolTip ("Error checking mail.")
+    else:
+        window.trayIcon.setToolTip ("You have "+ str(mail_count)+" unread letters")
+        window.trayIcon.setIcon(QIcon(":icons/mailbox_full.png"))
+        notify ("You have "+ str(mail_count) +" unread letters")
 def notify(message):
     if settings.value("Notify"):
         subprocess.Popen(['notify-send', programTitle, message])
@@ -208,7 +284,7 @@ if __name__ == '__main__':
             sys.exit(1)
     QApplication.setQuitOnLastWindowClosed(False)
     window = Window()
-    if SettingsExist():
+    if (GlobalSettingsExist() and AccountExist()):
         window.hide()
     else:
         window.show()
