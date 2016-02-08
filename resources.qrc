@@ -6,5 +6,8 @@
    <file>icons/menu_quit.png</file>
    <file>icons/check_now.png</file>
    <file>icons/settings.png</file>
+   <file>icons/add_account.png</file>
+   <file>icons/modify_account.png</file>
+   <file>icons/remove_account.png</file>
 </qresource>
 </RCC>

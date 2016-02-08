@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui/settings.ui'
 #
-# Created by: PyQt5 UI code generator 5.5
+# Created by: PyQt5 UI code generator 5.5.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Settings(object):
     def setupUi(self, Settings):
         Settings.setObjectName("Settings")
-        Settings.resize(585, 282)
+        Settings.resize(586, 332)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -21,7 +21,7 @@ class Ui_Settings(object):
         icon.addPixmap(QtGui.QPixmap("../icons/mailbox_empty.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Settings.setWindowIcon(icon)
         self.buttonBox = QtWidgets.QDialogButtonBox(Settings)
-        self.buttonBox.setGeometry(QtCore.QRect(20, 240, 341, 32))
+        self.buttonBox.setGeometry(QtCore.QRect(20, 290, 341, 32))
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName("buttonBox")
@@ -30,7 +30,7 @@ class Ui_Settings(object):
         self.boolifNotify.setChecked(True)
         self.boolifNotify.setObjectName("boolifNotify")
         self.groupBox = QtWidgets.QGroupBox(Settings)
-        self.groupBox.setGeometry(QtCore.QRect(20, 70, 541, 161))
+        self.groupBox.setGeometry(QtCore.QRect(20, 120, 541, 161))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -112,6 +112,30 @@ class Ui_Settings(object):
         self.label_2 = QtWidgets.QLabel(Settings)
         self.label_2.setGeometry(QtCore.QRect(260, 20, 61, 16))
         self.label_2.setObjectName("label_2")
+        self.comboBox = QtWidgets.QComboBox(Settings)
+        self.comboBox.setGeometry(QtCore.QRect(20, 80, 151, 23))
+        self.comboBox.setObjectName("comboBox")
+        self.btnAddAccount = QtWidgets.QPushButton(Settings)
+        self.btnAddAccount.setGeometry(QtCore.QRect(180, 80, 31, 23))
+        self.btnAddAccount.setText("")
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap(":/icons/add_account.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.btnAddAccount.setIcon(icon1)
+        self.btnAddAccount.setObjectName("btnAddAccount")
+        self.btnModifyAccount = QtWidgets.QPushButton(Settings)
+        self.btnModifyAccount.setGeometry(QtCore.QRect(220, 80, 31, 23))
+        self.btnModifyAccount.setText("")
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap(":/icons/modify_account.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.btnModifyAccount.setIcon(icon2)
+        self.btnModifyAccount.setObjectName("btnModifyAccount")
+        self.btnRemoveAccount = QtWidgets.QPushButton(Settings)
+        self.btnRemoveAccount.setGeometry(QtCore.QRect(260, 80, 31, 23))
+        self.btnRemoveAccount.setText("")
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap(":/icons/remove_account.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.btnRemoveAccount.setIcon(icon3)
+        self.btnRemoveAccount.setObjectName("btnRemoveAccount")
 
         self.retranslateUi(Settings)
         self.buttonBox.accepted.connect(Settings.accept)
@@ -134,4 +158,8 @@ class Ui_Settings(object):
         self.btnTestConnection.setText(_translate("Settings", "Test connection"))
         self.label.setText(_translate("Settings", "Check for unread mail every"))
         self.label_2.setText(_translate("Settings", "minutes"))
+        self.btnAddAccount.setToolTip(_translate("Settings", "Add account"))
+        self.btnModifyAccount.setToolTip(_translate("Settings", "Modify account"))
+        self.btnRemoveAccount.setToolTip(_translate("Settings", "Remove account"))
 
+import resources_rc

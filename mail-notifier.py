@@ -9,7 +9,7 @@ from PyQt5.QtCore import (QThread, QTimer, QFile, QSettings)
 import imaplib
 imaplib._MAXLINE = 400000
 import subprocess
-import res
+import resources_rc
 from ui_settings import Ui_Settings
 from PyQt5 import QtCore, QtGui, QtWidgets
 import os
