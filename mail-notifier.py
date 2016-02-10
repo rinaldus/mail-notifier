@@ -180,7 +180,7 @@ class Window(QDialog):
         self.ui.lblTestOutput.setText("Acount saved")
             
     def btnRemoveAccount_clicked(self):
-        reply = QMessageBox.critical(self, 'Warning!', "Delete this account permanently?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        reply = QMessageBox.warning(self, 'Warning!', "Delete this account permanently?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if (reply == QMessageBox.Yes):
             Index = self.ui.comboAccounts.currentIndex()
             GroupName = self.ui.comboAccounts.currentText()
@@ -260,19 +260,25 @@ def mail_check():
                 else:
                     mail_count += m.checkMail()
             else:
-                window.trayIcon.setToolTip("Unable to establish connection to mailbox. Check your mail settings and make sure that you have not network problems.")
-                notify("Unable to establish connection to mailbox. Check your mail settings and make sure that you have not network problems.")
-                window.trayIcon.setIcon(QIcon(":icons/mailbox_error.png"))
+                mail_count = "CONNECTION_ERROR"
     else:
-        window.trayIcon.setIcon(QIcon(":icons/mailbox_error.png"))
-        window.trayIcon.setToolTip("Cannot find configuration file. You should give access to your mailbox")
+        mail_count = "CONFIGURATION_ERROR"
         
+    # Parsing mail_count values
+    
     if mail_count == 0:
         window.trayIcon.setToolTip ("You have no unread mail")
         window.trayIcon.setIcon(QIcon(":icons/mailbox_empty.png"))
     elif mail_count == "ERROR":
         window.trayIcon.setIcon(QIcon(":icons/mailbox_error.png"))
         window.trayIcon.setToolTip ("Error checking mail.")
+    elif mail_count == "CONNECTION_ERROR":
+        window.trayIcon.setToolTip("Unable to establish connection to mailbox. Check your mail settings and make sure that you have not network problems.")
+        notify("Unable to establish connection to mailbox. Check your mail settings and make sure that you have not network problems.")
+        window.trayIcon.setIcon(QIcon(":icons/mailbox_error.png"))
+    elif mail_count == "CONFIGURATION_ERROR":
+        window.trayIcon.setIcon(QIcon(":icons/mailbox_error.png"))
+        window.trayIcon.setToolTip("Cannot find configuration file. You should give access to your mailbox")
     else:
         window.trayIcon.setToolTip ("You have "+ str(mail_count)+" unread letters")
         window.trayIcon.setIcon(QIcon(":icons/mailbox_full.png"))
