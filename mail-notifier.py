@@ -177,7 +177,7 @@ class Window(QDialog):
     
     def btnSaveAccount_clicked(self):
         self.SettingsSave(self.ui.comboAccounts.currentText())
-        self.ui.lblTestOutput.setText("Acount saved")
+        self.ui.lblTestOutput.setText("Account saved")
             
     def btnRemoveAccount_clicked(self):
         reply = QMessageBox.warning(self, 'Warning!', "Delete this account permanently?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
@@ -310,5 +310,3 @@ if __name__ == '__main__':
     mail_check()
     window.start()
     sys.exit(app.exec_())
-# TODO:
-# Separate mail count for each account

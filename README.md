@@ -20,6 +20,10 @@ $ chmod +x mail-notifier.py
 ```
 
 ## Changelog
+### Version 2.0-beta1 (release date: 10.02.16)
+* **Important! The configuration structure was changed. Users of Mail Notifier 1.x have to delete old configuration file located in ~/.config/mail-notifier/settings.conf before first launch of new version**
+* Multi account support. Now the program is able to check new mails in several mailboxes. You will get the total quantity of new mails from all mailboxes in system tray
+
 ### Version 1.02 (release date: 26.01.16)
 * Rewrote periodical mail check function and fixed bug in OS X
 
