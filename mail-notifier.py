@@ -11,14 +11,15 @@ imaplib._MAXLINE = 400000
 import subprocess
 import resources_rc
 from ui_settings import Ui_Settings
+from ui_about import Ui_about
 from PyQt5 import QtCore, QtGui, QtWidgets
 import os
 import socket
 import time
 
 #variables
-timers = []
 programTitle = "Mail Notifier"
+programVersion = "2.0"
 settings = QSettings(os.path.expanduser("~")+"/.config/mail-notifier/settings.conf", QSettings.NativeFormat)
 def GlobalSettingsExist():
     if ((settings.contains("CheckInterval") and settings.value("CheckInterval") != "") and
@@ -80,16 +81,15 @@ class Window(QDialog):
         
         # Menu actions
     def createActions(self):
-        self.quitAction = QAction(QIcon(':icons/menu_quit.png'),"&Quit", self,
-                triggered=QApplication.instance().quit)
-        self.checkNow = QAction(QIcon(':icons/check_now.png'),"&Check now", self,
-                triggered=mail_check)
-        self.restoreAction = QAction(QIcon(":icons/settings.png"),"&Settings", self,
-                triggered=self.showNormal)
+        self.aboutShow = QAction(QIcon(':icons/mailbox_empty.png'),"&About", self, triggered=self.aboutShow)
+        self.checkNow = QAction(QIcon(':icons/check_now.png'),"&Check now", self, triggered=mail_check)
+        self.restoreAction = QAction(QIcon(":icons/settings.png"),"&Settings", self, triggered=self.showNormal)
+        self.quitAction = QAction(QIcon(':icons/menu_quit.png'),"&Quit", self, triggered=QApplication.instance().quit)
 
         # UI functions
     def createTrayIcon(self):
         self.trayIconMenu = QMenu(self)
+        self.trayIconMenu.addAction(self.aboutShow)
         self.trayIconMenu.addAction(self.checkNow)
         self.trayIconMenu.addAction(self.restoreAction)
         self.trayIconMenu.addAction(self.quitAction)
@@ -196,6 +196,12 @@ class Window(QDialog):
         self.ui.txtboxPassword.setText(settings.value("Password"))
         self.ui.boolifSSL.setChecked(bool(settings.value("SSL")))
         settings.endGroup()
+        
+    def aboutShow(self):
+        if (about.isMinimized):
+            about.hide()
+        about.show()
+        about.activateWindow()
                         
     def start(self):
         if (GlobalSettingsExist() and AccountExist()):
@@ -207,9 +213,24 @@ class Window(QDialog):
         
     def stop (self):
         self.timer.stop()
-
-    def closeEvent(self, event): 
-        print ("Closing the app")
+        
+class About(QDialog):
+    def __init__(self):
+        super(About, self).__init__()
+        
+        self.ui = Ui_about()
+        self.ui.setupUi(self)
+        self.setWindowFlags(QtCore.Qt.Tool)
+        self.setFixedSize(483,334)
+        
+        self.ui.lblNameVersion.setText(programTitle + " " + programVersion)
+        
+        f = open('LICENSE.txt', 'r')
+        self.ui.txtLicense.setPlainText(f.read())
+                
+    def closeEvent(self, event):
+        event.ignore()
+        self.hide()
         
         
 # Common functions
@@ -288,6 +309,8 @@ def notify(message):
         subprocess.Popen(['notify-send', programTitle, message])
     return
     
+
+    
 if __name__ == '__main__':
     import sys
     app = QApplication(sys.argv)
@@ -302,6 +325,7 @@ if __name__ == '__main__':
             sys.exit(1)
     QApplication.setQuitOnLastWindowClosed(False)
     window = Window()
+    about = About()
     if (GlobalSettingsExist() and AccountExist()):
         window.hide()
     else:
