@@ -20,6 +20,7 @@ import time
 #variables
 programTitle = "Mail Notifier"
 programVersion = "2.0"
+programDir=os.path.dirname(__file__)
 settings = QSettings(os.path.expanduser("~")+"/.config/mail-notifier/settings.conf", QSettings.NativeFormat)
 def GlobalSettingsExist():
     if ((settings.contains("CheckInterval") and settings.value("CheckInterval") != "") and
@@ -225,7 +226,7 @@ class About(QDialog):
         
         self.ui.lblNameVersion.setText(programTitle + " " + programVersion)
         
-        f = open('LICENSE.txt', 'r')
+        f = open(os.path.join(programDir,'LICENSE.txt'), 'r')
         self.ui.txtLicense.setPlainText(f.read())
                 
     def closeEvent(self, event):
