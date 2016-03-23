@@ -22,6 +22,7 @@ class Ui_about(object):
         about.setWindowIcon(icon)
         self.txtLicense = QtWidgets.QPlainTextEdit(about)
         self.txtLicense.setGeometry(QtCore.QRect(50, 120, 381, 201))
+        self.txtLicense.setPlainText("")
         self.txtLicense.setObjectName("txtLicense")
         self.lblLogo = QtWidgets.QLabel(about)
         self.lblLogo.setGeometry(QtCore.QRect(50, 0, 131, 111))
@@ -46,6 +47,6 @@ class Ui_about(object):
     def retranslateUi(self, about):
         _translate = QtCore.QCoreApplication.translate
         about.setWindowTitle(_translate("about", "Mail Notifier"))
-        self.lblNameVersion.setText(_translate("about", "Mail Notifier 2.0"))
+        self.lblNameVersion.setText(_translate("about", "Mail Notifier"))
 
 import resources_rc
