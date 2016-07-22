@@ -88,6 +88,8 @@ class Window(QDialog):
         self.timer = QTimer(self)
         self.timer.timeout.connect(mail_check)
         
+        self.lastCheckCount = 0 # variable for prevent annoying popup notification when mail count didn't change since last check
+        
         # Menu actions
     def createActions(self):
         self.aboutShow = QAction(QIcon(':icons/mailbox_empty.png'),"&About", self, triggered=self.aboutShow)
@@ -333,7 +335,11 @@ def mail_check():
         painter.end()
         # End drawing text on icon
         window.trayIcon.setIcon(QtGui.QIcon(pixmap))
-        notify ("You have "+ str(mail_count) +" unread letters")
+        # Popup notification appears only if mail count changed since last check
+        if (mail_count != window.lastCheckCount):
+            notify ("You have "+ str(mail_count) +" unread letters")
+    # check was successfull, lastCheckCount is updating
+    window.lastCheckCount = mail_count
 def notify(message):
     if settings.value("Notify"):
         subprocess.Popen(['notify-send', programTitle, message])
