@@ -56,7 +56,16 @@ class Window(QDialog):
         self.createActions()
         self.setTitle=programTitle
         self.createTrayIcon()
-        self.trayIcon.setIcon(QIcon(":icons/mailbox_empty.png"))
+        # Draw system tray icon
+        pixmap = QtGui.QPixmap(QtGui.QPixmap(":icons/mailbox_empty.png"))
+        painter = QtGui.QPainter(pixmap)
+        painter.setPen(QtGui.QColor(255, 0, 0))
+        painter.setFont(QtGui.QFont('Arial', QtGui.QFont.Bold))
+        painter.drawText(QtCore.QRectF(pixmap.rect()), QtCore.Qt.AlignCenter, "0")
+        painter.end()
+        self.trayIcon.setIcon(QtGui.QIcon(pixmap))
+        # End drawing system tray icon
+        
         self.trayIcon.setToolTip("You have no unread letters")
         self.trayIcon.show()
         
@@ -291,8 +300,17 @@ def mail_check():
     # Parsing mail_count values
     
     if mail_count == 0:
+        # When mailbox have not unread letters
         window.trayIcon.setToolTip ("You have no unread mail")
-        window.trayIcon.setIcon(QIcon(":icons/mailbox_empty.png"))
+        # Draw text on icon
+        pixmap = QtGui.QPixmap(QtGui.QPixmap(":icons/mailbox_empty.png"))
+        painter = QtGui.QPainter(pixmap)
+        painter.setPen(QtGui.QColor(255, 0, 0))
+        painter.setFont(QtGui.QFont('Arial', 100,QtGui.QFont.Bold))
+        painter.drawText(QtCore.QRectF(pixmap.rect()), QtCore.Qt.AlignCenter, "0")
+        painter.end()
+        # End drawing text on icon
+        window.trayIcon.setIcon(QtGui.QIcon(pixmap))
     elif mail_count == "ERROR":
         window.trayIcon.setIcon(QIcon(":icons/mailbox_error.png"))
         window.trayIcon.setToolTip ("Error checking mail.")
@@ -304,8 +322,17 @@ def mail_check():
         window.trayIcon.setIcon(QIcon(":icons/mailbox_error.png"))
         window.trayIcon.setToolTip("Cannot find configuration file. You should give access to your mailbox")
     else:
+        # When mailbox has unread letters
         window.trayIcon.setToolTip ("You have "+ str(mail_count)+" unread letters")
-        window.trayIcon.setIcon(QIcon(":icons/mailbox_full.png"))
+        # Draw text on icon
+        pixmap = QtGui.QPixmap(QtGui.QPixmap(":icons/mailbox_full.png"))
+        painter = QtGui.QPainter(pixmap)
+        painter.setPen(QtGui.QColor(255, 255, 255))
+        painter.setFont(QtGui.QFont('Arial', 100,QtGui.QFont.Bold))
+        painter.drawText(QtCore.QRectF(pixmap.rect()), QtCore.Qt.AlignCenter, str(mail_count))
+        painter.end()
+        # End drawing text on icon
+        window.trayIcon.setIcon(QtGui.QIcon(pixmap))
         notify ("You have "+ str(mail_count) +" unread letters")
 def notify(message):
     if settings.value("Notify"):
