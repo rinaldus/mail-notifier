@@ -13,6 +13,7 @@ import subprocess
 import resources_rc
 from ui_settings import Ui_Settings
 from ui_about import Ui_about
+from ui_details import Ui_Details
 from PyQt5 import QtCore, QtGui, QtWidgets
 import os
 import socket
@@ -93,6 +94,7 @@ class Window(QDialog):
         
         # Menu actions
     def createActions(self):
+        self.detailsShow = QAction(QIcon(':icons/details.png'),"&Details", self, triggered=self.detailsShow)
         self.aboutShow = QAction(QIcon(':icons/mailbox_empty.png'),"&About", self, triggered=self.aboutShow)
         self.checkNow = QAction(QIcon(':icons/check_now.png'),"&Check now", self, triggered=mail_check)
         self.restoreAction = QAction(QIcon(":icons/settings.png"),"&Settings", self, triggered=self.showNormal)
@@ -101,12 +103,14 @@ class Window(QDialog):
         # UI functions
     def createTrayIcon(self):
         self.trayIconMenu = QMenu(self)
+        self.trayIconMenu.addAction(self.detailsShow)
         self.trayIconMenu.addAction(self.aboutShow)
         self.trayIconMenu.addAction(self.checkNow)
         self.trayIconMenu.addAction(self.restoreAction)
         self.trayIconMenu.addAction(self.quitAction)
         self.trayIcon = QSystemTrayIcon(self)
         self.trayIcon.setContextMenu(self.trayIconMenu)
+        self.trayIcon.activated.connect(self.trayIconActivated)
 
     def SettingsRestore(self):
         if (GlobalSettingsExist() and AccountExist()):
@@ -214,6 +218,15 @@ class Window(QDialog):
             about.hide()
         about.show()
         about.activateWindow()
+        
+    def detailsShow(self):
+        details.show()
+        details.activateWindow()
+        
+    def trayIconActivated(self, reason):
+        if reason in (QSystemTrayIcon.Trigger, QSystemTrayIcon.DoubleClick):
+            details.show()
+            details.activateWindow()
                         
     def start(self):
         if (GlobalSettingsExist() and AccountExist()):
@@ -243,6 +256,17 @@ class About(QDialog):
             f.close()
         self.ui.txtLicense.setPlainText(text)
                 
+    def closeEvent(self, event):
+        event.ignore()
+        self.hide()
+        
+class Details(QDialog):
+    def __init__(self):
+        super(Details, self).__init__()
+        
+        self.ui = Ui_Details()
+        self.ui.setupUi(self)
+        
     def closeEvent(self, event):
         event.ignore()
         self.hide()
@@ -385,6 +409,7 @@ if __name__ == '__main__':
     QApplication.setQuitOnLastWindowClosed(False)
     window = Window()
     about = About()
+    details = Details()
     if (GlobalSettingsExist() and AccountExist()):
         window.hide()
     else:

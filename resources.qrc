@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/">
+    <file>icons/details.png</file>
     <file>LICENSE.txt</file>
     <file>icons/save_account.png</file>
     <file>icons/mailbox_empty.png</file>
