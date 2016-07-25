@@ -283,13 +283,23 @@ class Mail():
                 typ, data = self.imap.fetch(num, '(RFC822)')
                 raw_mail = data[0][1]
                 mail=email.message_from_bytes(raw_mail)
-                subject = mail.get('Subject')
-                h=email.header.decode_header(subject)
+                h=email.header.decode_header(mail.get('Subject'))
                 if (h[0][1] != "unknown-8bit"):
-                    msg = h[0][0].decode(h[0][1]) if h[0][1] else h[0][0]
+                    SUBJ = h[0][0].decode(h[0][1]) if h[0][1] else h[0][0]
                 else:
-                    msg = "Unknown charset"
-                print(msg)
+                    SUBJ = "Unknown charset"
+                h=email.header.decode_header(mail.get('From'))
+                if (h[0][1] != "unknown-8bit"):
+                    FROM = h[0][0].decode(h[0][1]) if h[0][1] else h[0][0]
+                else:
+                    FROM = "Unknown charset"
+                h=email.header.decode_header(mail.get('Date'))
+                if (h[0][1] != "unknown-8bit"):
+                    DATE = h[0][0].decode(h[0][1]) if h[0][1] else h[0][0]
+                else:
+                    DATE = "Unknown charset"
+                output = [FROM, SUBJ, DATE]
+                return output
         except:
             print("Unable to get mail data")
             return "ERROR"
@@ -313,7 +323,7 @@ def mail_check():
                     mail_count = "ERROR"
                 else:
                     mail_count += m.checkMail()
-                    m.parseMail()
+                    print(m.parseMail())
             else:
                 mail_count = "CONNECTION_ERROR"
     else:
