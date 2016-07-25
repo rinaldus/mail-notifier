@@ -275,21 +275,22 @@ class Mail():
         except:
             print("Unable to check mail")
             return "ERROR"
-    def parseMail(self):
+    def parseMail(self,header):
         try:
+            output=[]
             self.imap.select(readonly=True)
             typ, data = self.imap.search(None, 'UNSEEN')
             for num in data[0].split():
                 typ, data = self.imap.fetch(num, '(RFC822)')
                 raw_mail = data[0][1]
                 mail=email.message_from_bytes(raw_mail)
-                subject = mail.get('Subject')
-                h=email.header.decode_header(subject)
+                h=email.header.decode_header(mail.get(header))
                 if (h[0][1] != "unknown-8bit"):
                     msg = h[0][0].decode(h[0][1]) if h[0][1] else h[0][0]
                 else:
                     msg = "Unknown charset"
-                print(msg)
+                output.append(msg)
+            return output
         except:
             print("Unable to get mail data")
             return "ERROR"
@@ -313,7 +314,9 @@ def mail_check():
                     mail_count = "ERROR"
                 else:
                     mail_count += m.checkMail()
-                    m.parseMail()
+                    print("FROM:",m.parseMail("From"))
+                    print("SUBJECT:",m.parseMail("Subject"))
+                    print("DATE:",m.parseMail("Date"))
             else:
                 mail_count = "CONNECTION_ERROR"
     else:
