@@ -277,8 +277,8 @@ class Mail():
             return "ERROR"
     def parseMail(self):
         try:
-            self.imap.select()
-            typ, data = self.imap.search(None, 'ALL')
+            self.imap.select(readonly=True)
+            typ, data = self.imap.search(None, 'UNSEEN')
             for num in data[0].split():
                 typ, data = self.imap.fetch(num, '(RFC822)')
                 raw_mail = data[0][1]
