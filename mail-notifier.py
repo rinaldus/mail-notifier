@@ -328,6 +328,9 @@ def mail_check():
     AllFroms=[]
     AllSubjs=[]
     AllDates=[]
+    details.ui.tableWidget.clearContents()
+    details.ui.tableWidget.setRowCount(0)
+    details.ui.tableWidget.setColumnCount(0)
     if (GlobalSettingsExist() and AccountExist()):
         m = Mail()
         groups = settings.childGroups()
