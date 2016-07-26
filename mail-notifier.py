@@ -266,6 +266,7 @@ class Details(QDialog):
         
         self.ui = Ui_Details()
         self.ui.setupUi(self)
+        self.setWindowFlags(QtCore.Qt.Window)
         self.ui.btnRefresh.clicked.connect(self.Refresh_clicked)
         
     def closeEvent(self, event):

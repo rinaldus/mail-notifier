@@ -3,9 +3,14 @@
 This is Light weight mail notifier written in PyQt5. It checks your mailbox periodically and notify you if you have new mail.
 
 ## Screenshots
-![MailboxEmpty](https://raw.github.com/rinaldus/mail-notify/master/screenshots/screen1.jpg)
-![MailboxFull](https://raw.github.com/rinaldus/mail-notify/master/screenshots/screen2.jpg)
-![Settings](https://raw.github.com/rinaldus/mail-notify/master/screenshots/screen3.jpg)
+### Version 3.0
+![MailboxEmpty](https://raw.github.com/rinaldus/mail-notifier/master/screenshots/no_unread_mails-3.0.jpg)
+![MailboxFull](https://raw.github.com/rinaldus/mail-notifier/master/screenshots/unread_mails-3.0.jpg)
+![Details](https://raw.github.com/rinaldus/mail-notifier/master/screenshots/details-3.0.jpg)
+### Version 1.0
+![MailboxEmpty](https://raw.github.com/rinaldus/mail-notifier/master/screenshots/screen1.jpg)
+![MailboxFull](https://raw.github.com/rinaldus/mail-notifier/master/screenshots/screen2.jpg)
+![Settings](https://raw.github.com/rinaldus/mail-notifier/master/screenshots/screen3.jpg)
 
 ## Install
 
@@ -20,6 +25,12 @@ $ chmod +x mail-notifier.py
 ```
 
 ## Changelog
+
+### Version 3.0 (release date: 26.07.16)
+* System tray icon displays count of unread mail directly on itself
+* Popup notification behaviour was changed: now popup notification appears only if the number of unread emails has
+changed since last mail check
+* Now you can view a short information about unread emails by click on system tray icon or choose "Details" from system tray menu
 
 ### Version 2.0 (release date: 23.03.16)
 * **Important! Users of Mail Notifier 1.x have to delete old configuration file located in ~/.config/mail-notifier/settings.conf before first launch of new version**
