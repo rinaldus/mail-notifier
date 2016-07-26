@@ -21,7 +21,7 @@ import time
 
 #variables
 programTitle = "Mail Notifier"
-programVersion = "2.0"
+programVersion = "3.0"
 settings = QSettings(os.path.expanduser("~")+"/.config/mail-notifier/settings.conf", QSettings.NativeFormat)
 def GlobalSettingsExist():
     if ((settings.contains("CheckInterval") and settings.value("CheckInterval") != "") and
@@ -103,8 +103,8 @@ class Window(QDialog):
         # UI functions
     def createTrayIcon(self):
         self.trayIconMenu = QMenu(self)
-        self.trayIconMenu.addAction(self.detailsShow)
         self.trayIconMenu.addAction(self.aboutShow)
+        self.trayIconMenu.addAction(self.detailsShow)
         self.trayIconMenu.addAction(self.checkNow)
         self.trayIconMenu.addAction(self.restoreAction)
         self.trayIconMenu.addAction(self.quitAction)
@@ -273,55 +273,7 @@ class Details(QDialog):
         self.hide()
         
     def Refresh_clicked(self):
-        mail_count = 0
-        AllFroms=[]
-        AllSubjs=[]
-        AllDates=[]
-        if (GlobalSettingsExist() and AccountExist()):
-            m = Mail()
-            groups = settings.childGroups()
-            for i in range (len(groups)):
-                settings.beginGroup(groups[i])
-                group = groups[i]
-                user = settings.value("Login")
-                password = settings.value("Password")
-                mailserver = settings.value("MailServer")
-                port = settings.value("Port")
-                ssl = settings.value("SSL")
-                settings.endGroup()
-                if m.login(mailserver,port,user,password,ssl):
-                    if (mail_count == "ERROR" or m.checkMail() == "ERROR"):
-                        mail_count = "ERROR"
-                    else:
-                        mail_count += m.checkMail()
-                        AllFroms.extend(m.parseMail("From"))
-                        AllSubjs.extend(m.parseMail("Subject"))
-                        AllDates.extend(m.parseMail("Date"))
-                else:
-                    mail_count = "CONNECTION_ERROR"
-        else:
-            mail_count = "CONFIGURATION_ERROR"
-        
-        data = {"From":AllFroms,
-                "Subject":AllSubjs,
-                "Date":AllDates,}
-        self.ui.tableWidget.setRowCount(len(AllFroms))
-        self.ui.tableWidget.setColumnCount(3)
-        #Enter data onto Table
-        horHeaders = []
-        for n, key in enumerate(sorted(data.keys())):
-            #print(data.keys())
-            horHeaders.append(key)
-            for m, item in enumerate(data[key]):
-                newitem = QtWidgets.QTableWidgetItem(item)
-                self.ui.tableWidget.setItem(m, n, newitem)
-        
-        #Add Header
-        self.ui.tableWidget.setHorizontalHeaderLabels(horHeaders)        
-
-        #Adjust size of Table
-        self.ui.tableWidget.resizeColumnsToContents()
-        self.ui.tableWidget.resizeRowsToContents()
+        mail_check()
         
 # Common functions
 
@@ -372,6 +324,9 @@ class Mail():
 
 def mail_check():
     mail_count = 0
+    AllFroms=[]
+    AllSubjs=[]
+    AllDates=[]
     if (GlobalSettingsExist() and AccountExist()):
         m = Mail()
         groups = settings.childGroups()
@@ -389,6 +344,9 @@ def mail_check():
                     mail_count = "ERROR"
                 else:
                     mail_count += m.checkMail()
+                    AllFroms.extend(m.parseMail("From"))
+                    AllSubjs.extend(m.parseMail("Subject"))
+                    AllDates.extend(m.parseMail("Date"))
             else:
                 mail_count = "CONNECTION_ERROR"
     else:
@@ -433,6 +391,28 @@ def mail_check():
         # Popup notification appears only if mail count changed since last check
         if (mail_count != window.lastCheckCount):
             notify ("You have "+ str(mail_count) +" unread letters")
+            
+        # Filling table
+        data = {"From":AllFroms,
+                "Subject":AllSubjs,
+                "Date":AllDates,}
+        details.ui.tableWidget.setRowCount(len(AllFroms))
+        details.ui.tableWidget.setColumnCount(3)
+        #Enter data onto Table
+        horHeaders = []
+        for n, key in enumerate(sorted(data.keys())):
+            #print(data.keys())
+            horHeaders.append(key)
+            for m, item in enumerate(data[key]):
+                newitem = QtWidgets.QTableWidgetItem(item)
+                details.ui.tableWidget.setItem(m, n, newitem)
+        
+        #Add Header
+        details.ui.tableWidget.setHorizontalHeaderLabels(horHeaders)        
+
+        #Adjust size of Table
+        details.ui.tableWidget.resizeColumnsToContents()
+        details.ui.tableWidget.resizeRowsToContents()
     # check was successfull, lastCheckCount is updating
     window.lastCheckCount = mail_count
 def notify(message):
