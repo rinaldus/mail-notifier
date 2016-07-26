@@ -11,23 +11,23 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Details(object):
     def setupUi(self, Details):
         Details.setObjectName("Details")
-        Details.resize(730, 467)
+        Details.resize(1048, 619)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/icons/mailbox_empty.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Details.setWindowIcon(icon)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(Details)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.pushButton = QtWidgets.QPushButton(Details)
+        self.btnRefresh = QtWidgets.QPushButton(Details)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushButton.sizePolicy().hasHeightForWidth())
-        self.pushButton.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.btnRefresh.sizePolicy().hasHeightForWidth())
+        self.btnRefresh.setSizePolicy(sizePolicy)
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap(":/icons/check_now.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton.setIcon(icon1)
-        self.pushButton.setObjectName("pushButton")
-        self.verticalLayout_2.addWidget(self.pushButton)
+        self.btnRefresh.setIcon(icon1)
+        self.btnRefresh.setObjectName("btnRefresh")
+        self.verticalLayout_2.addWidget(self.btnRefresh)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.tableWidget = QtWidgets.QTableWidget(Details)
@@ -43,6 +43,6 @@ class Ui_Details(object):
     def retranslateUi(self, Details):
         _translate = QtCore.QCoreApplication.translate
         Details.setWindowTitle(_translate("Details", "Mail Notifier"))
-        self.pushButton.setText(_translate("Details", "Refresh"))
+        self.btnRefresh.setText(_translate("Details", "Refresh"))
 
 import resources_rc

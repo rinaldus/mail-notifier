@@ -266,11 +266,62 @@ class Details(QDialog):
         
         self.ui = Ui_Details()
         self.ui.setupUi(self)
+        self.ui.btnRefresh.clicked.connect(self.Refresh_clicked)
         
     def closeEvent(self, event):
         event.ignore()
         self.hide()
         
+    def Refresh_clicked(self):
+        mail_count = 0
+        AllFroms=[]
+        AllSubjs=[]
+        AllDates=[]
+        if (GlobalSettingsExist() and AccountExist()):
+            m = Mail()
+            groups = settings.childGroups()
+            for i in range (len(groups)):
+                settings.beginGroup(groups[i])
+                group = groups[i]
+                user = settings.value("Login")
+                password = settings.value("Password")
+                mailserver = settings.value("MailServer")
+                port = settings.value("Port")
+                ssl = settings.value("SSL")
+                settings.endGroup()
+                if m.login(mailserver,port,user,password,ssl):
+                    if (mail_count == "ERROR" or m.checkMail() == "ERROR"):
+                        mail_count = "ERROR"
+                    else:
+                        mail_count += m.checkMail()
+                        AllFroms.extend(m.parseMail("From"))
+                        AllSubjs.extend(m.parseMail("Subject"))
+                        AllDates.extend(m.parseMail("Date"))
+                else:
+                    mail_count = "CONNECTION_ERROR"
+        else:
+            mail_count = "CONFIGURATION_ERROR"
+        
+        data = {"From":AllFroms,
+                "Subject":AllSubjs,
+                "Date":AllDates,}
+        self.ui.tableWidget.setRowCount(len(AllFroms))
+        self.ui.tableWidget.setColumnCount(3)
+        #Enter data onto Table
+        horHeaders = []
+        for n, key in enumerate(sorted(data.keys())):
+            #print(data.keys())
+            horHeaders.append(key)
+            for m, item in enumerate(data[key]):
+                newitem = QtWidgets.QTableWidgetItem(item)
+                self.ui.tableWidget.setItem(m, n, newitem)
+        
+        #Add Header
+        self.ui.tableWidget.setHorizontalHeaderLabels(horHeaders)        
+
+        #Adjust size of Table
+        self.ui.tableWidget.resizeColumnsToContents()
+        self.ui.tableWidget.resizeRowsToContents()
         
 # Common functions
 
@@ -338,9 +389,6 @@ def mail_check():
                     mail_count = "ERROR"
                 else:
                     mail_count += m.checkMail()
-                    print("FROM:",m.parseMail("From"))
-                    print("SUBJECT:",m.parseMail("Subject"))
-                    print("DATE:",m.parseMail("Date"))
             else:
                 mail_count = "CONNECTION_ERROR"
     else:
