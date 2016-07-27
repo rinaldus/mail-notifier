@@ -18,10 +18,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import os
 import socket
 import time
+from datetime import datetime, date, time
 
 #variables
 programTitle = "Mail Notifier"
-programVersion = "3.0"
+programVersion = "3.0-dev"
 settings = QSettings(os.path.expanduser("~")+"/.config/mail-notifier/settings.conf", QSettings.NativeFormat)
 def GlobalSettingsExist():
     if ((settings.contains("CheckInterval") and settings.value("CheckInterval") != "") and
@@ -324,6 +325,7 @@ class Mail():
             return "ERROR"
 
 def mail_check():
+    details.ui.statusBar.setText(datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")+" - Starting mail check")
     mail_count = 0
     AllFroms=[]
     AllSubjs=[]
@@ -370,16 +372,20 @@ def mail_check():
         painter.end()
         # End drawing text on icon
         window.trayIcon.setIcon(QtGui.QIcon(pixmap))
+        details.ui.statusBar.setText(datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")+" - Mail check completed. You have no unread letters")
     elif mail_count == "ERROR":
         window.trayIcon.setIcon(QIcon(":icons/mailbox_error.png"))
         window.trayIcon.setToolTip ("Error checking mail.")
+        details.ui.statusBar.setText(datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")+" - Error checking mail")
     elif mail_count == "CONNECTION_ERROR":
         window.trayIcon.setToolTip("Unable to establish connection to mailbox. Check your mail settings and make sure that you have not network problems.")
         notify("Unable to establish connection to mailbox. Check your mail settings and make sure that you have not network problems.")
         window.trayIcon.setIcon(QIcon(":icons/mailbox_error.png"))
+        details.ui.statusBar.setText(datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")+" - Unable to establish connection to mailbox. Check your mail settings and make sure that you have not network problems")
     elif mail_count == "CONFIGURATION_ERROR":
         window.trayIcon.setIcon(QIcon(":icons/mailbox_error.png"))
         window.trayIcon.setToolTip("Cannot find configuration file. You should give access to your mailbox")
+        details.ui.statusBar.setText(datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")+" - Cannot find configuration file. You should give access to your mailbox")
     else:
         # When mailbox has unread letters
         window.trayIcon.setToolTip ("You have "+ str(mail_count)+" unread letters")
@@ -417,6 +423,7 @@ def mail_check():
         #Adjust size of Table
         details.ui.tableWidget.resizeColumnsToContents()
         details.ui.tableWidget.resizeRowsToContents()
+        details.ui.statusBar.setText(datetime.strftime(datetime.now(), "%d.%m.%Y %H:%M:%S")+" - Mail check completed. You have "+ str(mail_count) +" unread letters")
     # check was successfull, lastCheckCount is updating
     window.lastCheckCount = mail_count
 def notify(message):

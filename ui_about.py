@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui/about.ui'
 #
-# Created by: PyQt5 UI code generator 5.5.1
+# Created by: PyQt5 UI code generator 5.6.1.dev1604271126
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -31,7 +31,7 @@ class Ui_about(object):
         self.lblLogo.setScaledContents(True)
         self.lblLogo.setObjectName("lblLogo")
         self.lblNameVersion = QtWidgets.QLabel(about)
-        self.lblNameVersion.setGeometry(QtCore.QRect(200, 40, 203, 31))
+        self.lblNameVersion.setGeometry(QtCore.QRect(200, 40, 261, 31))
         self.lblNameVersion.setMinimumSize(QtCore.QSize(203, 0))
         font = QtGui.QFont()
         font.setPointSize(20)
