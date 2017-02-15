@@ -111,7 +111,7 @@ class Window(QDialog):
         self.trayIconMenu.addAction(self.quitAction)
         self.trayIcon = QSystemTrayIcon(self)
         self.trayIcon.setContextMenu(self.trayIconMenu)
-        self.trayIcon.activated.connect(self.trayIconActivated)
+        #self.trayIcon.activated.connect(self.trayIconActivated)
 
     def SettingsRestore(self):
         if (GlobalSettingsExist() and AccountExist()):
