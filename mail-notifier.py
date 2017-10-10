@@ -22,7 +22,7 @@ from datetime import datetime, date, time
 
 #variables
 programTitle = "Mail Notifier"
-programVersion = "3.0-dev"
+programVersion = "3.01"
 settings = QSettings(os.path.expanduser("~")+"/.config/mail-notifier/settings.conf", QSettings.NativeFormat)
 def GlobalSettingsExist():
     if ((settings.contains("CheckInterval") and settings.value("CheckInterval") != "") and
@@ -120,6 +120,7 @@ class Window(QDialog):
     def SettingsRestore(self):
         if (GlobalSettingsExist() and AccountExist()):
             groups = settings.childGroups()
+            self.ui.comboAccounts.clear() # Clear account items before fill them again
             for i in range (len(groups)):
                 self.ui.comboAccounts.addItem(groups[i])
                 self.ui.comboAccounts.setCurrentText(groups[i])

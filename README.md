@@ -26,6 +26,11 @@ $ chmod +x mail-notifier.py
 
 ## Changelog
 
+### Version 3.01 (release date: 10.10.17)
+* Added status bar in Details window
+* Details window now remembers its size
+* Some cosmetic improvements in menu
+
 ### Version 3.0 (release date: 26.07.16)
 * System tray icon displays count of unread mail directly on itself
 * Popup notification behaviour was changed: now popup notification appears only if the number of unread emails has
