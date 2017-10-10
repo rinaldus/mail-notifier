@@ -269,9 +269,15 @@ class Details(QDialog):
         self.ui.setupUi(self)
         self.setWindowFlags(QtCore.Qt.Window)
         self.ui.btnRefresh.clicked.connect(self.Refresh_clicked)
+        if (settings.contains("Details_width") and settings.contains("Details_height")):
+            width = int(settings.value("Details_width"))
+            height = int(settings.value("Details_height"))
+            self.resize(width,height)
         
     def closeEvent(self, event):
         event.ignore()
+        settings.setValue("Details_width",self.width())
+        settings.setValue("Details_height",self.height())
         self.hide()
         
     def Refresh_clicked(self):
