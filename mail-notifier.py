@@ -95,19 +95,23 @@ class Window(QDialog):
         
         # Menu actions
     def createActions(self):
-        self.detailsShow = QAction(QIcon(':icons/details.png'),"&Details", self, triggered=self.detailsShow)
-        self.aboutShow = QAction(QIcon(':icons/mailbox_empty.png'),"&About", self, triggered=self.aboutShow)
+        self.detailsShow = QAction(QIcon(':icons/details.png'),"&Details...", self, triggered=self.detailsShow)
+        self.aboutShow = QAction(QIcon(':icons/mailbox_empty.png'),"&About " + programTitle + "...", self, triggered=self.aboutShow)
         self.checkNow = QAction(QIcon(':icons/check_now.png'),"&Check now", self, triggered=mail_check)
-        self.restoreAction = QAction(QIcon(":icons/settings.png"),"&Settings", self, triggered=self.showNormal)
+        self.restoreAction = QAction(QIcon(":icons/settings.png"),"&Settings...", self, triggered=self.showNormal)
         self.quitAction = QAction(QIcon(':icons/menu_quit.png'),"&Quit", self, triggered=QApplication.instance().quit)
 
         # UI functions
     def createTrayIcon(self):
         self.trayIconMenu = QMenu(self)
-        self.trayIconMenu.addAction(self.aboutShow)
+        f = self.trayIconMenu.font()
+        f.setBold(True)
+        self.detailsShow.setFont(f)
         self.trayIconMenu.addAction(self.detailsShow)
+        self.trayIconMenu.addSeparator()
         self.trayIconMenu.addAction(self.checkNow)
         self.trayIconMenu.addAction(self.restoreAction)
+        self.trayIconMenu.addAction(self.aboutShow)
         self.trayIconMenu.addAction(self.quitAction)
         self.trayIcon = QSystemTrayIcon(self)
         self.trayIcon.setContextMenu(self.trayIconMenu)
@@ -247,7 +251,7 @@ class About(QDialog):
         self.ui = Ui_about()
         self.ui.setupUi(self)
         self.setWindowFlags(QtCore.Qt.Tool)
-        self.setFixedSize(483,334)
+        self.setFixedSize(511,334)
         
         self.ui.lblNameVersion.setText(programTitle + " " + programVersion)
         
