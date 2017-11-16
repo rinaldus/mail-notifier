@@ -18,11 +18,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import os
 import socket
 import time
+import notify2
 from datetime import datetime, date, time
 
 #variables
 programTitle = "Mail Notifier"
-programVersion = "3.01"
+programVersion = "3.01-dev"
+notify2.init(programTitle)
 settings = QSettings(os.path.expanduser("~")+"/.config/mail-notifier/settings.conf", QSettings.NativeFormat)
 def GlobalSettingsExist():
     if ((settings.contains("CheckInterval") and settings.value("CheckInterval") != "") and
@@ -439,7 +441,8 @@ def mail_check():
     window.lastCheckCount = mail_count
 def notify(message):
     if settings.value("Notify"):
-        subprocess.Popen(['notify-send', programTitle, message])
+        n = notify2.Notification(programTitle, message)
+        n.show()
     return
     
 

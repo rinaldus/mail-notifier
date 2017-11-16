@@ -12,9 +12,14 @@ This is Light weight mail notifier written in PyQt5. It checks your mailbox peri
 ![MailboxFull](https://raw.github.com/rinaldus/mail-notifier/master/screenshots/screen2.jpg)
 ![Settings](https://raw.github.com/rinaldus/mail-notifier/master/screenshots/screen3.jpg)
 
+## System requirements
+ - Python 3
+ - PyQt5
+ - *(after version 3.01)* [notify2](https://pypi.python.org/pypi/notify2) library
+
 ## Install
 
-You need to install PyQt5 as dependency. Then just clone this git repository or download release and copy all files where you want to store this program. No additional installation is required.  
+Just clone this git repository or download release and copy all files where you want to store this program. No additional installation is required.  
 *In version 0.10 you also need to edit mail-notifier.py and fill your mailbox credentials in 70-72 rows*
 
 ## Launch
