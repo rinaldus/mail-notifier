@@ -440,14 +440,10 @@ def mail_check():
     # check was successfull, lastCheckCount is updating
     window.lastCheckCount = mail_count
 def notify(message):
-    try:
-        if settings.value("Notify"):
-            n = notify2.Notification(programTitle, message)
-            n.show()
-        return
-    except:
-        print(message)
-        pass
+    if settings.value("Notify"):
+        n = notify2.Notification(programTitle, message)
+        n.show()
+    return
     
 
     
