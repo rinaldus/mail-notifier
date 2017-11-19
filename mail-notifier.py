@@ -87,6 +87,12 @@ class Window(QDialog):
         self.ui.btnSaveAccount.clicked.connect(self.btnSaveAccount_clicked)
         self.ui.btnRemoveAccount.clicked.connect(self.btnRemoveAccount_clicked)
         
+        # Check if account doesn't exist, it creates default one
+        if (AccountExist() == False):
+            self.ui.comboAccounts.addItem("Default")
+            self.ui.comboAccounts.setCurrentText("Default")
+                
+        
         # Main timer
         self.timer = QTimer(self)
         self.timer.timeout.connect(mail_check)
@@ -208,6 +214,10 @@ class Window(QDialog):
             GroupName = self.ui.comboAccounts.currentText()
             self.ui.comboAccounts.removeItem(Index)
             self.SettingsRemove(GroupName)
+        # Check if account doesn't exist, it creates default one
+        if (AccountExist() == False):
+            self.ui.comboAccounts.addItem("Default")
+            self.ui.comboAccounts.setCurrentText("Default")
             
     def comboAccounts_changed(self):
         self.ui.lblTestOutput.setText("")
@@ -420,13 +430,17 @@ def mail_check():
         details.ui.tableWidget.setRowCount(len(AllFroms))
         details.ui.tableWidget.setColumnCount(3)
         #Enter data onto Table
-        horHeaders = []
-        for n, key in enumerate(sorted(data.keys())):
-            #print(data.keys())
-            horHeaders.append(key)
-            for m, item in enumerate(data[key]):
-                newitem = QtWidgets.QTableWidgetItem(item)
-                details.ui.tableWidget.setItem(m, n, newitem)
+        try:
+            horHeaders = []
+            for n, key in enumerate(sorted(data.keys())):
+                #print(data.keys())
+                horHeaders.append(key)
+                for m, item in enumerate(data[key]):
+                    newitem = QtWidgets.QTableWidgetItem(item)
+                    details.ui.tableWidget.setItem(m, n, newitem)
+        except:
+            print("Unable to load some data")
+            pass
         
         #Add Header
         details.ui.tableWidget.setHorizontalHeaderLabels(horHeaders)        
