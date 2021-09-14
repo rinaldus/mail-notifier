@@ -1,3 +1,7 @@
+# Migration
+
+This repository is now read only, I won't update it anymore. Actual repository is here: https://git.rinaldus.ru/Rinaldus/mail-notifier
+
 ## About
 
 This is Light weight mail notifier written in PyQt5. It checks your mailbox periodically and notify you if you have new mail.
